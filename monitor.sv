@@ -35,18 +35,17 @@ class monitor extends uvm_monitor;
 
             @(posedge vif.clk) begin
                 
-                if(!vif.busy_o) begin
-                    @(posedge vif.busy_o);
+                if(vif.valid_i) begin
                     begin_tr(tr_in, "req");
-                    tr_in.data = vif.dt_i;
+                    tr_in.data_i = vif.data_i;
+                    tr_in.reg_sel = vif.reg_sel;
+                    tr_in.instru = vif.instru;
                     req_port.write(tr_in);
-                    @(posedge vif.clk);
                     end_tr(tr_in);
                 end
-                else if(vif.busy_o)begin
-                    @(negedge vif.busy_o);
+                if(vif.valid_o)begin
                     begin_tr(tr_out, "resp");
-                    tr_out.result = vif.dt_o;
+                    tr_out.data_o = vif.data_o;
                     resp_port.write(tr_out);
                     end_tr(tr_out);
                 end

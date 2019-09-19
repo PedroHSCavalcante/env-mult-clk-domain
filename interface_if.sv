@@ -1,9 +1,11 @@
 interface interface_if(input clk, rst);
-    logic [15:0] A;
+    logic [15:0] data_i;
     logic  [1:0] reg_sel;
     logic  [1:0] instru;
-    logic        valid;
+    logic        valid_i;
+    logic [31:0] data_o;
+    logic 		 valid_o;
     
-    modport mst(input clk, rst, busy_o, dt_o, output dt_i, enb_i);
-    modport slv(input clk, rst, dt_i, enb_i, output busy_o, dt_o);
+    modport mst(input clk, rst, data_o, valid_o, output data_i, reg_sel, valid_i, instru);
+    modport slv(input clk, rst, data_i, valid_i, reg_sel, output data_o, valid_o);
 endinterface

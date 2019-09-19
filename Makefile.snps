@@ -1,0 +1,17 @@
+IFS = ./inteface_if.sv
+
+PKGS = ./pkg.sv
+
+RTL = ./rtl/sqrt_proc.sv \
+      ./rtl/sqrt_ctrl.sv  \
+      ./rtl/sqrt.sv  
+
+sim: clean
+	g++ -c refmod.cpp -o external.so
+	vcs -full64  -sverilog $(PKGS) $(IFS) $(RTL) top.sv -ntb_opts uvm -debug_pp -timescale=1ns/10ps  external.so
+	$ ./simv +UVM_TR_RECORD +UVM_VERBOSITY=HIGH +UVM_TESTNAME=simple_test
+clean:
+	rm -rf DVEfiles csrc simv simv.daidir ucli.key .vlogansetup.args .vlogansetup.env .vcs_lib_lock simv.vdb AN.DB vc_hdrs.h *.diag *.vpd *tar.gz external.o
+
+view_waves:
+	dve &

@@ -21,10 +21,10 @@ class driver extends uvm_driver #(transaction_in);
     task run_phase (uvm_phase phase);
 
         forever begin
+            if(vif.valid_i) @(posedge vif.clk) vif.valid_i = 1'b0;
             @(posedge vif.clk) begin
 
                 item_done = 1'b0;
-                vif.valid_i = 1'b0;
 
                 if(!vif.rst) begin
                     vif.data_i  <= '0;
